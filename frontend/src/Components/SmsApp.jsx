@@ -118,14 +118,15 @@ export default function SmsApp() {
   const [clientDetail, setClientDetail] = useState([]); // Client details including phone number
   const [phonenumber, setPhonenumber] = useState(''); // Phone number
   const [error, setError] = useState('');
+  const [prefix, setPrefix] = useState('')
 
-  const message = 'Hello, this is a test message from Signpost!'; // Message content
+  const message = `${prefix},${selectedPerson} signpost welcomes you!!`; // Message content
 
   // Fetch available pincodes on component load
   useEffect(() => {
     const fetchPincodes = async () => {
       try {
-        const response = await axios.get('http://localhost:8001/clients/get');
+        const response = await axios.get('https://smsapplication.onrender.com/clients/get');
         setPincodes(response.data);
       } catch (error) {
         setError('Error fetching pincode list.');
@@ -141,11 +142,12 @@ export default function SmsApp() {
     setSelectedPincode(pincode);
 
     try {
-      const response = await axios.get(`http://localhost:8001/clients/getClientPincode?pincode=${pincode}`);
-      setPersons(response.data); // Set the persons list for the selected pincode
+      const response = await axios.get(`https://smsapplication.onrender.com/clients/getClientPincode?pincode=${pincode}`);
+      setPersons(response.data);
       setSelectedPerson(''); // Reset selected person when pincode changes
       setClientDetail([]);
       setPhonenumber('');
+      setPrefix(response.data[0].prefix) // Set the prefix
     } catch (error) {
       setError('Error fetching persons based on pincode.');
       console.error('Error fetching persons:', error);
@@ -159,7 +161,7 @@ export default function SmsApp() {
     setError('');
 
     try {
-      const response = await axios.get(`http://localhost:8001/clients/getClientDetails?businessname=${selectedName}`);
+      const response = await axios.get(`https://smsapplication.onrender.com/clients/getClientDetails?businessname=${selectedName}`);
       setClientDetail(response.data);
 
       // Set phone number if found

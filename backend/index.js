@@ -9,7 +9,7 @@ app.use(cors())
 
 app.use(express.json())
 
-mongoose.connect('mongodb+srv://smsuser:smsdbclient@smscluster.x74rz.mongodb.net/SmsClients')
+mongoose.connect('mongodb+srv://smsuser:smsdbclient@smscluster.x74rz.mongodb.net/SmsClients?retryWrites=true&w=majority&appName=SMSCluster')
 
 mongoose.connection.on('connected', ()=>{
     console.log('mongodb connected successfully')
